@@ -35,6 +35,10 @@ namespace LINQedList
             Console.WriteLine("What is the largest price? $879.45, $9442.85, $2454.63, $45.65, $2340.29, $34.03, $4786.45, $745.31, $21.76?" );
             largetAmount();
             Console.ReadLine();
+
+            /*Console.WriteLine("Output the perfect square");
+            whereDaSquaresAt();
+            Console.ReadLine();*/
         }
 
         static void LuckyFruits()
@@ -57,7 +61,7 @@ namespace LINQedList
             // Which of the following numbers are multiples of 4 or 6
             List<int> numbers = new List<int>() { 15, 8, 21, 24, 32, 13, 30, 12, 7, 54, 48, 4, 49, 96};
 
-            var fourSixMultiples = numbers.Where((number, index)=> number <= index * 4);
+            var fourSixMultiples = numbers.Where(number => number % 6 == 0 || number % 4 == 0);
             foreach (int multiple in fourSixMultiples) {
                 Console.WriteLine(multiple);
             }
@@ -127,5 +131,17 @@ namespace LINQedList
             var largestPrice = prices.Max();
             Console.WriteLine(largestPrice);
         }
+
+        /*static void whereDaSquaresAt()
+        {
+            
+            Store each number in the following List until a perfect square
+            is detected.
+             Ref: https://msdn.microsoft.com/en-us/library/system.math.sqrt(v=vs.110).aspx 
+             
+            List<int> wheresSquaredo = new List<int>() { 66, 12, 8, 27, 82, 34, 7, 50, 19, 46, 81, 23, 30, 4, 68, 14};
+
+
+        }*/
     }
 }
