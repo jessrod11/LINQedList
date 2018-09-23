@@ -16,7 +16,7 @@ namespace LINQedList
             fourSixMultiples();
             Console.ReadLine();
 
-            Console.WriteLine("List of student names in alphabetical order...");
+            Console.WriteLine("List of student names in descending order...");
             StudentNames();
             Console.ReadLine();
 
@@ -33,12 +33,20 @@ namespace LINQedList
             Console.ReadLine();
 
             Console.WriteLine("What is the largest price? $879.45, $9442.85, $2454.63, $45.65, $2340.29, $34.03, $4786.45, $745.31, $21.76?" );
-            largetAmount();
+            largestAmount();
             Console.ReadLine();
 
-            /*Console.WriteLine("Output the perfect square");
+            Console.WriteLine("Output the perfect square");
             whereDaSquaresAt();
-            Console.ReadLine();*/
+            Console.ReadLine();
+
+            Console.WriteLine("List the millionaire's names and how many millionaires per bank...");
+            nameThatMillionaire();
+            Console.ReadLine();
+
+            Console.WriteLine("FINALLY!!! THE LAST ONE!");
+            moreAboutMillionaires();
+            Console.ReadLine();   
         }
 
         static void LuckyFruits()
@@ -123,7 +131,7 @@ namespace LINQedList
             Console.WriteLine(sumOfMoney);
         }
 
-        static void largetAmount()
+        static void largestAmount()
         {
             // What is our most expensive product?
             List<double> prices = new List<double>() { 879.45, 9442.85, 2454.63, 45.65, 2340.29, 34.03, 4786.45, 745.31, 21.76};
@@ -131,17 +139,133 @@ namespace LINQedList
             var largestPrice = prices.Max();
             Console.WriteLine(largestPrice);
         }
-
-        /*static void whereDaSquaresAt()
+  
+        static void whereDaSquaresAt()
         {
             
-            Store each number in the following List until a perfect square
-            is detected.
-             Ref: https://msdn.microsoft.com/en-us/library/system.math.sqrt(v=vs.110).aspx 
+            /*Store each number in the following List until a perfect square
+            is detected.*/
              
             List<int> wheresSquaredo = new List<int>() { 66, 12, 8, 27, 82, 34, 7, 50, 19, 46, 81, 23, 30, 4, 68, 14};
 
+            var perfectSquare = wheresSquaredo.TakeWhile(n => Math.Sqrt(n) % 1 != 0);
 
-        }*/
+            foreach (var perfection in perfectSquare)
+            {
+                Console.WriteLine(perfection);
+            }
+        }
+        public class Customer
+        {
+            public string Name { get; set; }
+            public double Balance { get; set; }
+            public string Bank { get; set; }
+        }
+        static void nameThatMillionaire()
+        {
+            // Build a collection of customers who are millionaires
+            var customers = new List<Customer>() {
+                new Customer(){ Name="Bob Lesman", Balance=80345.66, Bank="FTB"},
+                new Customer(){ Name="Joe Landy", Balance=9284756.21, Bank="WF"},
+                new Customer(){ Name="Meg Ford", Balance=487233.01, Bank="BOA"},
+                new Customer(){ Name="Peg Vale", Balance=7001449.92, Bank="BOA"},
+                new Customer(){ Name="Mike Johnson", Balance=790872.12, Bank="WF"},
+                new Customer(){ Name="Les Paul", Balance=8374892.54, Bank="WF"},
+                new Customer(){ Name="Sid Crosby", Balance=957436.39, Bank="FTB"},
+                new Customer(){ Name="Sarah Ng", Balance=56562389.85, Bank="FTB"},
+                new Customer(){ Name="Tina Fey", Balance=1000000.00, Bank="CITI"},
+                new Customer(){ Name="Sid Brown", Balance=49582.68, Bank="CITI"}
+            };
+
+            var allMillionaires = new List<Customer>();
+
+            foreach (var customer in customers)
+            {
+                if(customer.Balance >= 1000000)
+                {
+                    allMillionaires.Add(customer);
+                }
+            }
+
+            foreach(var millionaire in allMillionaires)
+            {
+                Console.WriteLine(millionaire.Name);
+            }
+
+            /*  Given the same customer set, display how many millionaires per bank.
+
+             Example Output:
+             WF 2
+             BOA 1
+             FTB 1
+             CITI 1
+         */
+            var results = from a in allMillionaires
+                          group a.Balance by a.Bank into g
+                          select new { Bank = g.Key, balances = g.ToList() };
+
+            foreach (var result in results)
+            {
+                Console.WriteLine($"{result.Bank} : {result.balances.Count()}");
+            }
+
+        }
+        /*
+    TASK:
+    As in the previous exercise, you're going to output the millionaires,
+    but you will also display the full name of the bank. You also need
+    to sort the millionaires' names, ascending by their LAST name.
+
+    Example output:
+        Tina Fey at Citibank
+        Joe Landy at Wells Fargo
+        Sarah Ng at First Tennessee
+        Les Paul at Wells Fargo
+        Peg Vale at Bank of America
+*/
+
+        // Define a bank
+        public class Bank
+        {
+            public string Symbol { get; set; }
+            public string Name { get; set; }
+        }
+        static void moreAboutMillionaires()
+        {
+            // Create some banks and store in a List
+            List<Bank> banks = new List<Bank>() {
+            new Bank(){ Name="First Tennessee", Symbol="FTB"},
+            new Bank(){ Name="Wells Fargo", Symbol="WF"},
+            new Bank(){ Name="Bank of America", Symbol="BOA"},
+            new Bank(){ Name="Citibank", Symbol="CITI"},
+        };
+
+            // Create some customers and store in a List
+            List<Customer> customers = new List<Customer>() {
+            new Customer(){ Name="Bob Lesman", Balance=80345.66, Bank="FTB"},
+            new Customer(){ Name="Joe Landy", Balance=9284756.21, Bank="WF"},
+            new Customer(){ Name="Meg Ford", Balance=487233.01, Bank="BOA"},
+            new Customer(){ Name="Peg Vale", Balance=7001449.92, Bank="BOA"},
+            new Customer(){ Name="Mike Johnson", Balance=790872.12, Bank="WF"},
+            new Customer(){ Name="Les Paul", Balance=8374892.54, Bank="WF"},
+            new Customer(){ Name="Sid Crosby", Balance=957436.39, Bank="FTB"},
+            new Customer(){ Name="Sarah Ng", Balance=56562389.85, Bank="FTB"},
+            new Customer(){ Name="Tina Fey", Balance=1000000.00, Bank="CITI"},
+            new Customer(){ Name="Sid Brown", Balance=49582.68, Bank="CITI"}
+        };
+            var millionaireReport = from bank in banks
+                                    join customer in customers on bank.Symbol equals customer.Bank
+                                    orderby customer.Name.Split(" ").Last()
+                                    select new { BankName = bank.Name, Customer = customer.Name, customer.Balance };
+            Console.WriteLine("List  millionaires by last name with the last name in ascending order at their specified bank...");
+
+        foreach (var customer in millionaireReport)
+
+                if(customer.Balance >= 1000000)
+            {
+                Console.WriteLine($"{customer.Customer} at {customer.BankName}");
+            }
+
+        }
     }
 }
